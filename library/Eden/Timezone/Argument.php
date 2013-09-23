@@ -49,5 +49,5 @@ class Argument extends CoreArgument
 
         return parent::isValid($type, $data);
     }
-	
+
 }

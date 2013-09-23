@@ -9,16 +9,17 @@
 
 namespace Eden\Timezone;
 
+use Eden\Core\Base as CoreBase;
+ 
 /**
- * Validation
+ * Timezone Validation
  *
  * @vendor Eden
  * @package Timezone
  * @author Christian Blanquera cblanquera@openovate.com
  */
-class Validation extends Base 
+class Validation extends CoreBase 
 {
-
 	const INSTANCE = 1;
 	
     /**
@@ -62,5 +63,4 @@ class Validation extends Base
 		
 		return preg_match('/^(GMT|UTC){0,1}(\-|\+)[0-9]{1,2}(\:{0,1}[0-9]{2}){0,1}$/', $value); 
 	}
-	
 }

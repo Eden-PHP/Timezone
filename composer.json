@@ -1,5 +1,5 @@
 {
-    "name": "eden-php/timezone",
+    "name": "eden/timezone",
     "type": "library",
     "description": "Eden timezone component",
     "keywords": ["eden", "library"],

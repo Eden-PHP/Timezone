@@ -9,7 +9,7 @@
  * distributed with this package.
  */
 
-class Eden_Tests_Timezone_ValidationTest extends \PHPUnit_Framework_TestCase {
+class Eden_Timezone_Tests_Timezone_ValidationTest extends \PHPUnit_Framework_TestCase {
 
     public function testIsAbbr() {
         $zone = 'abbr';

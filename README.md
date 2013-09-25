@@ -148,7 +148,7 @@ Handing timezones for projects can be a real pain. Eden makes this process easie
 
 ====
 
-#Contibuting to Eden
+#Contributing to Eden
 
 ##Setting up your machine with the Eden repository and your fork
 

@@ -9,16 +9,14 @@
 
 namespace Eden\Timezone;
 
-use Eden\Timezone\Argument as TimezoneArgument;
-
 /**
  * Core Factory Class
  *
  * @vendor Eden
- * @package Core
+ * @package timezone
  * @author Christian Blanquera cblanquera@openovate.com
  */
-class Factory extends Base
+class Index extends Base
 {
     const GMT = 'GMT';
     const UTC = 'UTC';
@@ -34,7 +32,7 @@ class Factory extends Base
      */
     public function __construct($zone, $time = null)
     {
-        TimezoneArgument::i()
+        Argument::i()
 			//argument 1 must be a string
             ->test(1, 'string')                  
 			//argument 2 must be a timezone indeicator
@@ -46,7 +44,7 @@ class Factory extends Base
             $time = time();
         }
 
-        $this->offset 	= $this->calculateOffset($zone);
+        $this->offset = $this->calculateOffset($zone);
         $this->setTime($time);
     }
 
@@ -59,7 +57,7 @@ class Factory extends Base
      */
     public function convertTo($zone, $format = null)
     {
-        TimezoneArgument::i()
+        Argument::i()
 			//argument 1 must be a string
             ->test(1, 'string')                  
 			//argument 1 must be a timezone identifier
@@ -85,7 +83,7 @@ class Factory extends Base
     public function getGMT($prefix = self::GMT)
     {
         //argument must be a string
-        TimezoneArgument::i()->test(1, 'string');
+        Argument::i()->test(1, 'string');
 
         list($hour, $minute, $sign) = $this->getUtcParts($this->offset);
         return $prefix.$sign.$hour.$minute;
@@ -101,7 +99,7 @@ class Factory extends Base
      */
     public function getGMTDates($format, $interval = 30, $prefix = self::GMT)
     {
-        TimezoneArgument::i()
+        Argument::i()
 			//argument 1 must be a string
             ->test(1, 'string')          
 			//argument 2 must be an integer
@@ -140,7 +138,7 @@ class Factory extends Base
      */
     public function getOffsetDates($format, $interval = 30)
     {
-        TimezoneArgument::i()
+        Argument::i()
 			//argument 1 must be a string
             ->test(1, 'string') 
 			//argument 2 must be an integer
@@ -166,7 +164,7 @@ class Factory extends Base
     public function getTime($format = null)
     {
         //argument 1 must be a string or null
-        TimezoneArgument::i()->test(1, 'string', 'null');
+        Argument::i()->test(1, 'string', 'null');
 
         $time = $this->time + $this->offset;
 
@@ -186,7 +184,7 @@ class Factory extends Base
     public function getUTC($prefix = self::UTC)
     {
         //argument 1 must be a string
-        TimezoneArgument::i()->test(1, 'string');
+        Argument::i()->test(1, 'string');
 
         list($hour, $minute, $sign) = $this->getUtcParts($this->offset);
         return $prefix.$sign.$hour.':'.$minute;
@@ -202,7 +200,7 @@ class Factory extends Base
      */
     public function getUTCDates($format, $interval = 30, $prefix = self::UTC)
     {
-        TimezoneArgument::i()
+        Argument::i()
 			//argument 1 must be a string
             ->test(1, 'string')          
 			//argument 2 must be an integer
@@ -223,15 +221,105 @@ class Factory extends Base
     }
 
     /**
+     * Returns the relative distance
+	 * $time > this->time = ago
+     *
+     * @param int|string
+     * @param int 
+     * @return this
+     */
+    public function toRelative($time = null, $level = 7, $default = 'F d, Y')
+    {
+        Argument::i()
+			//argument 1 must be an integer or string
+			->test(1, 'int', 'string', 'null')
+			//argument 2 must be an integer
+			->test(2, 'int');
+        
+		//if no time
+		if(is_null($time)) {
+			//time get now
+			$time = time();
+		}
+		
+		if(is_string($time)) {
+            $time = strtotime($time);
+        }
+		
+		$passed =  $time - $this->time;
+		
+		$gravity = array(
+			'second' => 1,
+			'minute' => 60,
+			'hour' => 60 * 60,
+			'day' => 60 * 60 * 24,
+			'week' => 60 * 60 * 24 * 7,
+			'month' => 60 * 60 * 24 * 30,
+			'year' => 60 * 60 * 24 * 30 * 12);
+		
+		$tokens = array();
+		
+		$i = 0;
+		foreach($gravity as $magnitude => $distance) {
+			if($i >= $level) {
+				break;
+			}
+			
+			array_unshift($tokens, array($distance, $magnitude));
+			array_push($tokens, array($distance * -1, $magnitude));
+			
+			$i++;
+		}
+		
+		if($passed > $tokens[0][0] || $passed < $tokens[count($tokens) - 1][0]) {
+			return date($default, $this->time);
+		}
+		
+		for($i = 0; $i < count($tokens); $i++) {
+			$distance = $tokens[$i][0];
+			$relative = $tokens[$i][1];
+			
+			if($passed < $distance) {
+				continue;
+			}
+			
+			if($distance < 0) {
+				$distance = $tokens[$i-1][0];
+				$relative = $tokens[$i-1][1];
+			}
+			
+			$difference = (int) round($passed / $distance);
+			
+			if($relative === 'second' && -5 < $difference && $difference < 5) {
+				return 'Now';
+			} 
+			
+			if($relative === 'day' && $difference === 1) {
+				if($tokens[$i][0] < 0) {
+					return 'Tomorrow';
+				}
+				
+				return 'Yesterday';
+			} 
+			
+			$suffix = $distance > 0 ? ' ago': ' from now';
+
+			return $difference . ' ' . $relative . ($difference === 1 ? '' : 's') . $suffix;
+		}
+		
+		return date($default, $this->time);
+    }
+
+    /**
      * Sets a new time
      *
      * @param int|string
-     * @return Eden\Timezone\Timezone
+     * @return this
      */
     public function setTime($time)
     {
         //argument 1 must be an integer or string
-        TimezoneArgument::i()->test(1, 'int', 'string');
+        Argument::i()->test(1, 'int', 'string');
         if(is_string($time)) {
             $time = strtotime($time);
         }
@@ -243,7 +331,7 @@ class Factory extends Base
     /**
      * Returns timezone's validation methods
      *
-     * @return Eden\Timezone\Timezone\Validation
+     * @return this
      */
     public function validation()
     {

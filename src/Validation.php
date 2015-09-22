@@ -8,17 +8,15 @@
  */
 
 namespace Eden\Timezone;
-
-use Eden\Core\Base as CoreBase;
  
 /**
  * Timezone Validation
  *
  * @vendor Eden
- * @package Timezone
+ * @package timezone
  * @author Christian Blanquera cblanquera@openovate.com
  */
-class Validation extends CoreBase 
+class Validation extends Base 
 {
 	const INSTANCE = 1;
 	

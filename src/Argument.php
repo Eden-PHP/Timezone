@@ -23,7 +23,7 @@ namespace Eden\Timezone;
  */
 class Argument extends \Eden\Core\Argument
 {
-	/**
+    /**
      * Validates an argument given the type.
      *
      * @param *string
@@ -41,7 +41,8 @@ class Argument extends \Eden\Core\Argument
                 return $valid->isUtc($data);
             case 'abbr':
                 return $valid->isAbbr($data);
-            default: break;
+            default:
+                break;
         }
 
         return parent::isValid($type, $data);

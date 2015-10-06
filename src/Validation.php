@@ -16,49 +16,49 @@ namespace Eden\Timezone;
  * @package timezone
  * @author Christian Blanquera cblanquera@openovate.com
  */
-class Validation extends Base 
+class Validation extends Base
 {
-	const INSTANCE = 1;
-	
+    const INSTANCE = 1;
+    
     /**
-	 * Validates that value is a proper abbreviation
-	 *
-	 * @param scalar
-	 * @return bool
-	 */
-	public function isAbbr($value) 
-	{
-		//argument 1 must be scalar
-		Argument::i()->test(1, 'scalar');
-		
-		return preg_match('/^[A-Z]{1,5}$/', $value); 
-	}
-	
+     * Validates that value is a proper abbreviation
+     *
+     * @param scalar
+     * @return bool
+     */
+    public function isAbbr($value)
+    {
+        //argument 1 must be scalar
+        Argument::i()->test(1, 'scalar');
+        
+        return preg_match('/^[A-Z]{1,5}$/', $value);
+    }
+    
     /**
-	 * Validates that value is a proper location
-	 *
-	 * @param scalar
-	 * @return bool
-	 */
-	public function isLocation($value) 
-	{
-		//argument 1 must be scalar
-		Argument::i()->test(1, 'scalar');
-		
-		return in_array($value, \DateTimeZone::listIdentifiers());
-	}
-	
+     * Validates that value is a proper location
+     *
+     * @param scalar
+     * @return bool
+     */
+    public function isLocation($value)
+    {
+        //argument 1 must be scalar
+        Argument::i()->test(1, 'scalar');
+        
+        return in_array($value, \DateTimeZone::listIdentifiers());
+    }
+    
     /**
-	 * Validates that value is a proper UTC
-	 *
-	 * @param scalar
-	 * @return bool
-	 */
-	public function isUtc($value) 
-	{
-		//argument 1 must be scalar
-		Argument::i()->test(1, 'scalar');
-		
-		return preg_match('/^(GMT|UTC){0,1}(\-|\+)[0-9]{1,2}(\:{0,1}[0-9]{2}){0,1}$/', $value); 
-	}
+     * Validates that value is a proper UTC
+     *
+     * @param scalar
+     * @return bool
+     */
+    public function isUtc($value)
+    {
+        //argument 1 must be scalar
+        Argument::i()->test(1, 'scalar');
+        
+        return preg_match('/^(GMT|UTC){0,1}(\-|\+)[0-9]{1,2}(\:{0,1}[0-9]{2}){0,1}$/', $value);
+    }
 }

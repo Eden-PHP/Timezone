@@ -33,14 +33,14 @@ class Index extends Base
     public function __construct($zone, $time = null)
     {
         Argument::i()
-			//argument 1 must be a string
-            ->test(1, 'string')                  
-			//argument 2 must be a timezone indeicator
-            ->test(1, 'location', 'utc', 'abbr') 
-			//argument 3 must be an integer, string or null
-            ->test(2, 'int', 'string', 'null');  
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 2 must be a timezone indeicator
+            ->test(1, 'location', 'utc', 'abbr')
+            //argument 3 must be an integer, string or null
+            ->test(2, 'int', 'string', 'null');
 
-        if(is_null($time)) {
+        if (is_null($time)) {
             $time = time();
         }
 
@@ -58,16 +58,16 @@ class Index extends Base
     public function convertTo($zone, $format = null)
     {
         Argument::i()
-			//argument 1 must be a string
-            ->test(1, 'string')                  
-			//argument 1 must be a timezone identifier
-            ->test(1, 'location', 'utc', 'abbr') 
-			//argument 2 must be a string or null
-            ->test(2, 'string', 'null');         
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 1 must be a timezone identifier
+            ->test(1, 'location', 'utc', 'abbr')
+            //argument 2 must be a string or null
+            ->test(2, 'string', 'null');
 
         $time = $this->time + $this->calculateOffset($zone);
 
-        if(!is_null($format)) {
+        if (!is_null($format)) {
             return date($format, $time);
         }
 
@@ -100,17 +100,17 @@ class Index extends Base
     public function getGMTDates($format, $interval = 30, $prefix = self::GMT)
     {
         Argument::i()
-			//argument 1 must be a string
-            ->test(1, 'string')          
-			//argument 2 must be an integer
-            ->test(2, 'int')             
-			//argument 3 must be a string or null
-            ->test(3, 'string', 'null'); 
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 2 must be an integer
+            ->test(2, 'int')
+            //argument 3 must be a string or null
+            ->test(3, 'string', 'null');
 
-        $offsets 	= $this->getOffsetDates($format, $interval);
-        $dates 		= array();
+        $offsets    = $this->getOffsetDates($format, $interval);
+        $dates      = array();
 
-        foreach($offsets as $offset => $date) {
+        foreach ($offsets as $offset => $date) {
             list($hour, $minute, $sign) = $this->getUtcParts($offset);
             $gmt = $prefix.$sign.$hour.$minute;
             $dates[$gmt] = $date;
@@ -139,15 +139,15 @@ class Index extends Base
     public function getOffsetDates($format, $interval = 30)
     {
         Argument::i()
-			//argument 1 must be a string
-            ->test(1, 'string') 
-			//argument 2 must be an integer
-            ->test(2, 'int');   
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 2 must be an integer
+            ->test(2, 'int');
 
         $dates = array();
         $interval *= 60;
 
-        for($i=-12*3600; $i <= (12*3600); $i+=$interval) {
+        for ($i=-12*3600; $i <= (12*3600); $i+=$interval) {
             $time = $this->time + $i;
             $dates[$i] = date($format, $time);
         }
@@ -168,7 +168,7 @@ class Index extends Base
 
         $time = $this->time + $this->offset;
 
-        if(!is_null($format)) {
+        if (!is_null($format)) {
             return date($format, $time);
         }
 
@@ -201,17 +201,17 @@ class Index extends Base
     public function getUTCDates($format, $interval = 30, $prefix = self::UTC)
     {
         Argument::i()
-			//argument 1 must be a string
-            ->test(1, 'string')          
-			//argument 2 must be an integer
-            ->test(2, 'int')             
-			//argument 3 must be a string or null
-            ->test(3, 'string', 'null'); 
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 2 must be an integer
+            ->test(2, 'int')
+            //argument 3 must be a string or null
+            ->test(3, 'string', 'null');
 
-        $offsets 	= $this->getOffsetDates($format, $interval);
-        $dates 		= array();
+        $offsets    = $this->getOffsetDates($format, $interval);
+        $dates      = array();
 
-        foreach($offsets as $offset => $date) {
+        foreach ($offsets as $offset => $date) {
             list($hour, $minute, $sign) = $this->getUtcParts($offset);
             $utc = $prefix.$sign.$hour.':'.$minute;
             $dates[$utc] = $date;
@@ -222,92 +222,92 @@ class Index extends Base
 
     /**
      * Returns the relative distance
-	 * $time > this->time = ago
+     * $time > this->time = ago
      *
      * @param int|string
-     * @param int 
+     * @param int
      * @return this
      */
     public function toRelative($time = null, $level = 7, $default = 'F d, Y')
     {
         Argument::i()
-			//argument 1 must be an integer or string
-			->test(1, 'int', 'string', 'null')
-			//argument 2 must be an integer
-			->test(2, 'int');
+            //argument 1 must be an integer or string
+            ->test(1, 'int', 'string', 'null')
+            //argument 2 must be an integer
+            ->test(2, 'int');
         
-		//if no time
-		if(is_null($time)) {
-			//time get now
-			$time = time();
-		}
-		
-		if(is_string($time)) {
+        //if no time
+        if (is_null($time)) {
+            //time get now
+            $time = time();
+        }
+        
+        if (is_string($time)) {
             $time = strtotime($time);
         }
-		
-		$passed =  $time - $this->time;
-		
-		$gravity = array(
-			'second' => 1,
-			'minute' => 60,
-			'hour' => 60 * 60,
-			'day' => 60 * 60 * 24,
-			'week' => 60 * 60 * 24 * 7,
-			'month' => 60 * 60 * 24 * 30,
-			'year' => 60 * 60 * 24 * 30 * 12);
-		
-		$tokens = array();
-		
-		$i = 0;
-		foreach($gravity as $magnitude => $distance) {
-			if($i >= $level) {
-				break;
-			}
-			
-			array_unshift($tokens, array($distance, $magnitude));
-			array_push($tokens, array($distance * -1, $magnitude));
-			
-			$i++;
-		}
-		
-		if($passed > $tokens[0][0] || $passed < $tokens[count($tokens) - 1][0]) {
-			return date($default, $this->time);
-		}
-		
-		for($i = 0; $i < count($tokens); $i++) {
-			$distance = $tokens[$i][0];
-			$relative = $tokens[$i][1];
-			
-			if($passed < $distance) {
-				continue;
-			}
-			
-			if($distance < 0) {
-				$distance = $tokens[$i-1][0];
-				$relative = $tokens[$i-1][1];
-			}
-			
-			$difference = (int) round($passed / $distance);
-			
-			if($relative === 'second' && -5 < $difference && $difference < 5) {
-				return 'Now';
-			} 
-			
-			if($relative === 'day' && $difference === 1) {
-				if($tokens[$i][0] < 0) {
-					return 'Tomorrow';
-				}
-				
-				return 'Yesterday';
-			} 
-			
-			$suffix = $distance > 0 ? ' ago': ' from now';
+        
+        $passed =  $time - $this->time;
+        
+        $gravity = array(
+            'second' => 1,
+            'minute' => 60,
+            'hour' => 60 * 60,
+            'day' => 60 * 60 * 24,
+            'week' => 60 * 60 * 24 * 7,
+            'month' => 60 * 60 * 24 * 30,
+            'year' => 60 * 60 * 24 * 30 * 12);
+        
+        $tokens = array();
+        
+        $i = 0;
+        foreach ($gravity as $magnitude => $distance) {
+            if ($i >= $level) {
+                break;
+            }
+            
+            array_unshift($tokens, array($distance, $magnitude));
+            array_push($tokens, array($distance * -1, $magnitude));
+            
+            $i++;
+        }
+        
+        if ($passed > $tokens[0][0] || $passed < $tokens[count($tokens) - 1][0]) {
+            return date($default, $this->time);
+        }
+        
+        for ($i = 0; $i < count($tokens); $i++) {
+            $distance = $tokens[$i][0];
+            $relative = $tokens[$i][1];
+            
+            if ($passed < $distance) {
+                continue;
+            }
+            
+            if ($distance < 0) {
+                $distance = $tokens[$i-1][0];
+                $relative = $tokens[$i-1][1];
+            }
+            
+            $difference = (int) round($passed / $distance);
+            
+            if ($relative === 'second' && -5 < $difference && $difference < 5) {
+                return 'Now';
+            }
+            
+            if ($relative === 'day' && $difference === 1) {
+                if ($tokens[$i][0] < 0) {
+                    return 'Tomorrow';
+                }
+                
+                return 'Yesterday';
+            }
+            
+            $suffix = $distance > 0 ? ' ago': ' from now';
 
-			return $difference . ' ' . $relative . ($difference === 1 ? '' : 's') . $suffix;
-		}
-		
-		return date($default, $this->time);
+            return $difference . ' ' . $relative . ($difference === 1 ? '' : 's') . $suffix;
+        }
+        
+        return date($default, $this->time);
     }
 
     /**
@@ -320,7 +320,7 @@ class Index extends Base
     {
         //argument 1 must be an integer or string
         Argument::i()->test(1, 'int', 'string');
-        if(is_string($time)) {
+        if (is_string($time)) {
             $time = strtotime($time);
         }
 
@@ -346,15 +346,15 @@ class Index extends Base
      */
     protected function calculateOffset($zone)
     {
-        if($this->validation()->isLocation($zone)) {
+        if ($this->validation()->isLocation($zone)) {
             return $this->getOffsetFromLocation($zone);
         }
 
-        if($this->validation()->isUtc($zone)) {
+        if ($this->validation()->isUtc($zone)) {
             return $this->getOffsetFromUtc($zone);
         }
 
-        if($this->validation()->isAbbr($zone)) {
+        if ($this->validation()->isAbbr($zone)) {
             return $this->getOffsetFromAbbr($zone);
         }
 
@@ -396,22 +396,22 @@ class Index extends Base
      */
     protected function getOffsetFromUtc($zone)
     {
-        $zone 	= str_replace(array('GMT','UTC'), '', $zone);
-        $zone 	= str_replace(':', '', $zone);
+        $zone   = str_replace(array('GMT','UTC'), '', $zone);
+        $zone   = str_replace(':', '', $zone);
 
-        $add 	= $zone[0] == '+';
-        $zone 	= substr($zone, 1);
+        $add    = $zone[0] == '+';
+        $zone   = substr($zone, 1);
 
         switch(strlen($zone)) {
             case 1:
             case 2:
                 return $zone * 3600 * ($add?1:-1);
             case 3:
-                $hour 	= substr($zone, 0, 1) * 3600;
+                $hour   = substr($zone, 0, 1) * 3600;
                 $minute = substr($zone, 1) * 60;
                 return ($hour+$minute) * ($add?1:-1);
             case 4:
-                $hour 	= substr($zone, 0, 2) * 3600;
+                $hour   = substr($zone, 0, 2) * 3600;
                 $minute = substr($zone, 2) * 60;
                 return ($hour+$minute) * ($add?1:-1);
 

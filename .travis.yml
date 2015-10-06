@@ -7,6 +7,5 @@ install:
 - phpenv rehash 
 script:
 - phpunit
-- phpcbf
 - phpcs
 

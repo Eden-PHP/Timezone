@@ -402,7 +402,7 @@ class Index extends Base
         $add    = $zone[0] == '+';
         $zone   = substr($zone, 1);
 
-        switch(strlen($zone)) {
+        switch (strlen($zone)) {
             case 1:
             case 2:
                 return $zone * 3600 * ($add?1:-1);

@@ -34,7 +34,7 @@ class Argument extends \Eden\Core\Argument
     {
         $valid = Validation::i();
 
-        switch($type) {
+        switch ($type) {
             case 'location':
                 return $valid->isLocation($data);
             case 'utc':

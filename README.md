@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/Eden-PHP/Timezone.png)](https://travis-ci.org/Eden-PHP/Timezone)
+===
 # Timezones
 
 Timezones in *Eden* have progressed to be so simple to make conversions from one timezone to another. We simplified this process over time to one line of code. `Figure 1` shows how it's simply done.

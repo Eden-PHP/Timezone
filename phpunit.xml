@@ -9,11 +9,13 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="Tests/bootstrap.php"
+         bootstrap="test/bootstrap.php"
 >
   <testsuites>
-    <testsuite name="Eden Timezone Test Suite">
-      <directory>./Tests/Timezone</directory>
+    <testsuite name="Eden Template Test Suite">
+      <file>test/Argument.php</file>
+      <file>test/Validation.php</file>
+      <file>test/Index.php</file>
     </testsuite>
   </testsuites>
 

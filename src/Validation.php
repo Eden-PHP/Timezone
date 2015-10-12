@@ -12,9 +12,10 @@ namespace Eden\Timezone;
 /**
  * Timezone Validation
  *
- * @vendor Eden
- * @package timezone
- * @author Christian Blanquera cblanquera@openovate.com
+ * @vendor   Eden
+ * @package  timezone
+ * @author   Christian Blanquera <cblanquera@openovate.com>
+ * @standard PSR-2
  */
 class Validation extends Base
 {
@@ -24,6 +25,7 @@ class Validation extends Base
      * Validates that value is a proper abbreviation
      *
      * @param scalar
+     *
      * @return bool
      */
     public function isAbbr($value)
@@ -38,6 +40,7 @@ class Validation extends Base
      * Validates that value is a proper location
      *
      * @param scalar
+     *
      * @return bool
      */
     public function isLocation($value)
@@ -52,6 +55,7 @@ class Validation extends Base
      * Validates that value is a proper UTC
      *
      * @param scalar
+     *
      * @return bool
      */
     public function isUtc($value)

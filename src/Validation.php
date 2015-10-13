@@ -1,9 +1,9 @@
 <?php //-->
-/*
- * This file is part of the Timezone package of the Eden PHP Library.
- * (c) 2013-2014 Openovate Labs
+/**
+ * This file is part of the Eden PHP Library.
+ * (c) 2014-2016 Openovate Labs
  *
- * Copyright and license information can be found at LICENSE
+ * Copyright and license information can be found at LICENSE.txt
  * distributed with this package.
  */
 
@@ -12,9 +12,10 @@ namespace Eden\Timezone;
 /**
  * Timezone Validation Class
  *
- * @vendor Eden
- * @package Timezone
- * @author Christian Blanquera cblanquera@openovate.com
+ * @package  Eden
+ * @category Timezone
+ * @author   Christian Blanquera <cblanquera@openovate.com>
+ * @standard PSR-2
  */
 class Validation extends Base
 {
@@ -23,7 +24,8 @@ class Validation extends Base
     /**
      * Validates that value is a proper abbreviation
      *
-     * @param *scalar   $value value
+     * @param *scalar $value The value to test against
+     *
      * @return bool
      */
     public function isAbbr($value)
@@ -37,7 +39,8 @@ class Validation extends Base
     /**
      * Validates that value is a proper location
      *
-     * @param *scalar   $value value
+     * @param *scalar $value The value to test against
+     *
      * @return bool
      */
     public function isLocation($value)
@@ -51,7 +54,8 @@ class Validation extends Base
     /**
      * Validates that value is a proper UTC
      *
-     * @param *scalar   $value value
+     * @param *scalar $value The value to test against
+     *
      * @return bool
      */
     public function isUtc($value)

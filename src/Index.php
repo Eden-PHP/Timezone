@@ -1,9 +1,9 @@
 <?php //-->
-/*
- * This file is part of the Core package of the Eden PHP Library.
- * (c) 2013-2014 Openovate Labs
+/**
+ * This file is part of the Eden PHP Library.
+ * (c) 2014-2016 Openovate Labs
  *
- * Copyright and license information can be found at LICENSE
+ * Copyright and license information can be found at LICENSE.txt
  * distributed with this package.
  */
 
@@ -12,23 +12,40 @@ namespace Eden\Timezone;
 /**
  * Core Factory Class
  *
- * @vendor Eden
- * @package timezone
- * @author Christian Blanquera cblanquera@openovate.com
+ * @package  Eden
+ * @category Timezone
+ * @author   Christian Blanquera <cblanquera@openovate.com>
+ * @standard PSR-2
  */
 class Index extends Base
 {
+    /**
+     * @const string GMT GMT timezone
+     */
     const GMT = 'GMT';
-    const UTC = 'UTC';
 
+    /**
+     * @const string UTC UTC timezone
+     */
+    const UTC = 'UTC';
+       
+    /**
+     * @var string|null $offset The offset from the given timezone
+     */
     protected $offset = null;
+       
+    /**
+     * @var int|null $time The time to be manipulated
+     */
     protected $time = null;
 
     /**
      * Preset the timezone and time
      *
-     * @param *string
-     * @param int|string|null
+     * @param *string         $zone The timezone to use
+     * @param int|string|null $time The time to use
+     *
+     * @return void
      */
     public function __construct($zone, $time = null)
     {
@@ -51,8 +68,9 @@ class Index extends Base
     /**
      * Convert current time set here to another time zone
      *
-     * @param *string valid UTC, GMT, PHP Location or TZ Abbreviation
-     * @param string|null
+     * @param *string     $zone   valid UTC, GMT, PHP Location or TZ Abbreviation
+     * @param string|null $format format
+     *
      * @return string|int
      */
     public function convertTo($zone, $format = null)
@@ -77,7 +95,8 @@ class Index extends Base
     /**
      * Returns the GMT Format
      *
-     * @param string
+     * @param string $prefix Prefix to add before the returned value
+     *
      * @return string
      */
     public function getGMT($prefix = self::GMT)
@@ -92,9 +111,10 @@ class Index extends Base
     /**
      * Returns a list of GMT formats and dates in a 24 hour period
      *
-     * @param *string
-     * @param int
-     * @param string|null
+     * @param *string     $format   The format of each date to display
+     * @param int         $interval The frequency of rows
+     * @param string|null $prefix   The prefix to add before each date display
+     *
      * @return array
      */
     public function getGMTDates($format, $interval = 30, $prefix = self::GMT)
@@ -132,8 +152,9 @@ class Index extends Base
     /**
      * Returns a list of offsets and dates in a 24 hour period
      *
-     * @param *string
-     * @param int
+     * @param *string $format   The format of each date to display
+     * @param int     $interval The frequency of rows
+     *
      * @return array
      */
     public function getOffsetDates($format, $interval = 30)
@@ -158,7 +179,8 @@ class Index extends Base
     /**
      * Returns the time or date
      *
-     * @param string|null
+     * @param string|null $format Time format
+     *
      * @return string|int
      */
     public function getTime($format = null)
@@ -178,7 +200,8 @@ class Index extends Base
     /**
      * Returns the UTC Format
      *
-     * @param string|null
+     * @param string|null $prefix The prefix to add before the returned value
+     *
      * @return string
      */
     public function getUTC($prefix = self::UTC)
@@ -193,9 +216,10 @@ class Index extends Base
     /**
      * Returns a list of UTC formats and dates in a 24 hour period
      *
-     * @param *string
-     * @param int
-     * @param string|null
+     * @param *string     $format   The format of each date to display
+     * @param int         $interval The frequency of rows
+     * @param string|null $prefix   The prefix to add before each date display
+     *
      * @return array
      */
     public function getUTCDates($format, $interval = 30, $prefix = self::UTC)
@@ -224,9 +248,11 @@ class Index extends Base
      * Returns the relative distance
      * $time > this->time = ago
      *
-     * @param int|string
-     * @param int
-     * @return this
+     * @param int|string $time    The time to make relative
+     * @param int        $level   The granular level
+     * @param string     $default The default date format
+     *
+     * @return Eden\Timezone\Index
      */
     public function toRelative($time = null, $level = 7, $default = 'F d, Y')
     {
@@ -313,8 +339,9 @@ class Index extends Base
     /**
      * Sets a new time
      *
-     * @param int|string
-     * @return this
+     * @param *int|string $time The time value
+     *
+     * @return Eden\Timezone\Index
      */
     public function setTime($time)
     {
@@ -331,7 +358,7 @@ class Index extends Base
     /**
      * Returns timezone's validation methods
      *
-     * @return this
+     * @return Eden\Timezone\Index
      */
     public function validation()
     {
@@ -341,8 +368,9 @@ class Index extends Base
     /**
      * returns the offset based on timezone
      *
-     * @param string
-     * @return string
+     * @param *string $zone The timezone to calculate the offset with
+     *
+     * @return string|int
      */
     protected function calculateOffset($zone)
     {
@@ -365,7 +393,8 @@ class Index extends Base
      * returns the offset based using the
      * timezone abbreviation
      *
-     * @param string
+     * @param *string $zone The timezone to calculate the offset with
+     *
      * @return string
      */
     protected function getOffsetFromAbbr($zone)
@@ -377,7 +406,8 @@ class Index extends Base
     /**
      * returns the offset based on location
      *
-     * @param string
+     * @param *string $zone The timezone to calculate the offset with
+     *
      * @return string
      */
     protected function getOffsetFromLocation($zone)
@@ -391,8 +421,9 @@ class Index extends Base
     /**
      * returns the offset based on UTC
      *
-     * @param string
-     * @return string
+     * @param *string $zone The timezone to calculate the offset with
+     *
+     * @return string|int
      */
     protected function getOffsetFromUtc($zone)
     {
@@ -423,8 +454,9 @@ class Index extends Base
     /**
      * returns the UTC meta based on offset
      *
-     * @param int
-     * @return string
+     * @param *string $offset Offset to test against
+     *
+     * @return array
      */
     private function getUtcParts($offset)
     {
